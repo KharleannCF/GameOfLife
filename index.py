@@ -17,6 +17,10 @@ screen = pygame.display.set_mode([width, height])
 manager = pygame_gui.UIManager((width, height))
 gameState = np.zeros([width, height])
 
+speed = 0.1
+solitude = 2
+poblation = 3
+
 speedButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((10, 510), (100, 30)),
                                            text='Speed Up',
                                            manager=manager)
@@ -24,9 +28,31 @@ speedButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((10, 510), 
 slowButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((110, 510), (100, 30)),
                                           text='Slow down',
                                           manager=manager)
+solitudeLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((215, 515), (100, 20)),
+                                            text='Solitude: ' + str(solitude),
+                                            manager=manager)
 
+solitudePlusButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((320, 505), (20, 20)),
+                                                  text='+',
+                                                  manager=manager)
 
-speed = 0.1
+solitudeMinusButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((320, 525), (20, 20)),
+                                                   text='-',
+                                                   manager=manager)
+
+PoblationLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((345, 515), (100, 20)),
+                                             text='Poblation: ' +
+                                             str(poblation),
+                                             manager=manager)
+
+poblationPlusButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((450, 505), (20, 20)),
+                                                   text='+',
+                                                   manager=manager)
+
+poblationMinusButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((450, 525), (20, 20)),
+                                                    text='-',
+                                                    manager=manager)
+
 
 clock = pygame.time.Clock()
 
@@ -59,6 +85,30 @@ while running:
                     speed = speed/1.5
                 elif event.ui_element == slowButton:
                     speed = speed*1.5
+                elif event.ui_element == solitudePlusButton:
+                    solitude = solitude + 1
+                    solitudeLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((215, 515), (100, 20)),
+                                                                text='Solitude: ' +
+                                                                str(solitude),
+                                                                manager=manager)
+                elif event.ui_element == solitudeMinusButton:
+                    solitude = solitude - 1
+                    solitudeLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((215, 515), (100, 20)),
+                                                                text='Solitude: ' +
+                                                                str(solitude),
+                                                                manager=manager)
+                elif event.ui_element == poblationPlusButton:
+                    poblation = poblation + 1
+                    PoblationLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((345, 515), (100, 20)),
+                                                                text='Poblation: ' +
+                                                                str(poblation),
+                                                                manager=manager)
+                elif event.ui_element == poblationMinusButton:
+                    poblation = poblation - 1
+                    PoblationLabel = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((345, 515), (100, 20)),
+                                                                text='Poblation: ' +
+                                                                str(poblation),
+                                                                manager=manager)
 
         mouseClick = pygame.mouse.get_pressed()
         if sum(mouseClick) > 0:
@@ -84,9 +134,9 @@ while running:
                     gameState[(x+1) % numOfCellX, (y) % numOfCellY] +\
                     gameState[(x+1) % numOfCellX, (y+1) % numOfCellY]
 
-                if gameState[x, y] == 0 and nNeight == 3:
+                if gameState[x, y] == 0 and nNeight == poblation:
                     newGameState[x, y] = 1
-                elif gameState[x, y] == 1 and nNeight < 2 or nNeight > 3:
+                elif gameState[x, y] == 1 and nNeight < solitude or nNeight > poblation:
                     newGameState[x, y] = 0
             poly = [((x)*cellWidth, (y)*cellHeight),
                     ((x+1)*cellWidth, (y)*cellHeight),
